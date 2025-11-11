@@ -1,0 +1,52 @@
+# Grafana Flux Queries for Smart Library Dashboard
+
+# --- Instructions ---
+# 1. Go to your Grafana dashboard (http://localhost:3000).
+# 2. Add a new panel or edit an existing one.
+# 3. Ensure the 'InfluxDB' data source is selected.
+# 4. Paste the desired query into the Flux query editor.
+# 5. Adjust the time range in Grafana's dashboard settings (e.g., "Last 5 minutes").
+# 6. Select your visualization type (e.g., "Graph", "Gauge").
+# 7. Save your panel and dashboard.
+
+# --- Queries ---
+
+# 1. People Count
+# Displays the number of people detected over time.
+from(bucket: "my-bucket")
+  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)
+  |> filter(fn: (r) => r._measurement == "SensorReadings" and r._field == "people_count")
+  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)
+  |> yield(name: "people_count")
+
+# 2. Temperature
+# Displays the temperature readings over time.
+from(bucket: "my-bucket")
+  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)
+  |> filter(fn: (r) => r._measurement == "SensorReadings" and r._field == "temperature")
+  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)
+  |> yield(name: "temperature")
+
+# 3. Humidity
+# Displays the humidity readings over time.
+from(bucket: "my-bucket")
+  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)
+  |> filter(fn: (r) => r._measurement == "SensorReadings" and r._field == "humidity")
+  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)
+  |> yield(name: "humidity")
+
+# 4. Pressure
+# Displays the atmospheric pressure readings over time.
+from(bucket: "my-bucket")
+  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)
+  |> filter(fn: (r) => r._measurement == "SensorReadings" and r._field == "pressure")
+  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)
+  |> yield(name: "pressure")
+
+# 5. Air Quality Resistance
+# Displays the gas resistance (proxy for air quality) readings over time.
+from(bucket: "my-bucket")
+  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)
+  |> filter(fn: (r) => r._measurement == "SensorReadings" and r._field == "air_quality_resistance")
+  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)
+  |> yield(name: "air_quality_resistance")
