@@ -88,6 +88,13 @@ def read_bme680():
 # def control_servo(angle):
 #     print(f"Servo set to angle {angle}")
 
+def get_light_level(frame):
+    # Convert frame to grayscale
+    gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    # Calculate the average brightness (mean pixel value)
+    light_level = gray_frame.mean()
+    return {"light_level": light_level}
+
 # --- Person Detection ---
 def detect_people(frame):
     if net is None:
@@ -147,6 +154,7 @@ def main():
 
             # 2. Sensor Readings
             bme_data = read_bme680()
+            light_data = get_light_level(frame)
             # noise_data = read_noise_level()
 
             # 3. Local Actuation Logic (Example: LED based on people count)
@@ -166,6 +174,7 @@ def main():
                     "humidity": bme_data.get("humidity"),
                     "pressure": bme_data.get("pressure"),
                     "air_quality_resistance": bme_data.get("air_quality_resistance"),
+                    "light_level": light_data.get("light_level"),
                     # "noise_db": noise_data.get("noise_db")
                 }
             }
